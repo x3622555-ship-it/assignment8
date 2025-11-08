@@ -1,16 +1,52 @@
-## Ports & Endpoints (local testing)
+🏗️ Trading System Architecture
+          ┌───────────────┐
+          │   Gateway     │
+          │ (Price Feed)  │
+          └─────┬─────────┘
+                │ Broadcasts Prices (PRICE,<symbol>,<price>*)
+                ▼
+        ┌───────────────┐
+        │  OrderBook    │
+        │ (Shared Memory)│
+        └─────┬─────────┘
+                │ Provides latest prices
+                ▼
+        ┌───────────────┐
+        │  Strategy     │
+        │ (Trading Logic│
+        │  & Decisions) │
+        └─────┬─────────┘
+                │ Sends Orders
+                ▼
+        ┌───────────────┐
+        │ OrderManager  │
+        │ (Confirms)    │
+        └───────────────┘
 
-All services run on localhost (127.0.0.1).
+▶️ Run Instructions (General)
 
-- Gateway (price + news server) — `127.0.0.1:9000`  
-  - Streams messages (delimiter `*`) to connected clients.
+Open your terminal and navigate to the project folder.
 
-- OrderBook — client connecting to Gateway at `127.0.0.1:9000`  
-  - Parses ticks and updates shared memory.
+Activate your virtual environment.
 
-- OrderManager (order receiver) — `127.0.0.1:9001`  
-  - Receives order JSON messages from Strategy (delimiter `*`).
+Install project dependencies if not already installed.
 
-- Strategy — connects to:
-  - Gateway: `127.0.0.1:9000`
-  - OrderManager: `127.0.0.1:9001`
+Start the trading system, either by:
+
+Running each component (Gateway, OrderBook, OrderManager, Strategy) in separate terminals, or
+
+Running the main script that launches all components together.
+
+Observe outputs in the console or log files to monitor live prices, orders sent, and confirmations.
+
+Stop all components safely when finished.
+
+🧪 Run Tests (General)
+
+Ensure the virtual environment is active.
+
+Run the test suite for the project.
+
+Verify that all tests pass successfully.
+
+Stop any running modules before testing if necessary.

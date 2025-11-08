@@ -1,0 +1,13 @@
+2025-11-08 15:54:18,252 - Sent order: {'symbol': 'MSFT', 'side': 'BUY', 'qty': 10, 'price': 95.96}
+2025-11-08 15:54:18,756 - Confirmation: {"status": "ACCEPTED", "symbol": "MSFT", "side": "BUY", "qty": 10, "price": 95.96}
+2025-11-08 15:54:19,758 - Sent order: {'symbol': 'GOOGL', 'side': 'SELL', 'qty': 10, 'price': 107.47}
+2025-11-08 15:54:20,271 - Confirmation: {"status": "ACCEPTED", "symbol": "GOOGL", "side": "SELL", "qty": 10, "price": 107.47}
+2025-11-08 15:54:21,279 - Sent order: {'symbol': 'GOOGL', 'side': 'SELL', 'qty': 10, 'price': 108.11}
+2025-11-08 15:54:21,782 - Confirmation: {"status": "ACCEPTED", "symbol": "GOOGL", "side": "SELL", "qty": 10, "price": 108.11}
+2025-11-08 15:54:22,788 - Sent order: {'symbol': 'AAPL', 'side': 'BUY', 'qty': 10, 'price': 95.47}
+2025-11-08 15:54:23,297 - Confirmation: {"status": "ACCEPTED", "symbol": "AAPL", "side": "BUY", "qty": 10, "price": 95.47}
+2025-11-08 15:54:24,310 - Sent order: {'symbol': 'AAPL', 'side': 'SELL', 'qty': 10, 'price': 102.82}
+2025-11-08 15:54:24,814 - Confirmation: {"status": "ACCEPTED", "symbol": "AAPL", "side": "SELL", "qty": 10, "price": 102.82}
+2025-11-08 17:23:24,005 - Sent order: {'symbol': 'AAPL', 'side': 'BUY', 'qty': 10, 'price': 100.0}
+2025-11-08 17:23:24,555 - Confirmation: {"status": "ACCEPTED", "symbol": "AAPL", "side": "BUY", "qty": 10, "price": 100.0}
+2025-11-08 17:23:24,799 - Sent order: {'symbol': 'GOOGL', 'side': 'BUY', 'qty': 10, 'price': 97.53}
