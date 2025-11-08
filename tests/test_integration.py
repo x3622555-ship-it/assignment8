@@ -1,25 +1,27 @@
-import pytest
+import unittest
+from src.gateway import Gateway
+from src.ordermanager import OrderManager
 from src.strategy import Strategy
+from src.shared_memory_utils import read_shared_memory
 
-def test_strategy_integration(monkeypatch):
-    """Integration test for Strategy, Gateway, and OrderManager"""
+class TestIntegration(unittest.TestCase):
+    def setUp(self):
+        self.gateway = Gateway("DemoGateway")
+        self.order_manager = OrderManager()
+        self.strategy = Strategy(self.gateway, self.order_manager)
 
-    strat = Strategy()
+    def test_full_flow(self):
+        # Simulate multiple market ticks
+        for _ in range(2):
+            market_data = self.gateway.get_market_data()
+            self.strategy.run()
 
-    # Prevent infinite loop in gateway/strategy
-    monkeypatch.setattr("time.sleep", lambda x: (_ for _ in ()).throw(KeyboardInterrupt))
+        orders = read_shared_memory()
+        self.assertTrue(len(orders) > 0)
+        for order in orders:
+            self.assertIn("symbol", order)
+            self.assertIn("price", order)
+            self.assertIn("qty", order)
 
-    try:
-        strat.run()
-    except KeyboardInterrupt:
-        pass
-
-    # Check that the strategy's OrderManager sent at least one order
-    assert hasattr(strat, "om"), "Strategy should have an OrderManager instance"
-    assert len(strat.om.sent_orders) > 0
-    for order in strat.om.sent_orders:
-        assert "symbol" in order
-        assert "side" in order
-        assert "qty" in order
-        assert "price" in order
-    print("✅ Integration test passed successfully")
+if __name__ == "__main__":
+    unittest.main()

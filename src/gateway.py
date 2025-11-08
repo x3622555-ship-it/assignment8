@@ -1,39 +1,23 @@
-import time
+# src/gateway.py
 import random
-import logging
-
-# Configure system log
-system_logger = logging.getLogger("system")
-system_logger.setLevel(logging.INFO)
-system_handler = logging.FileHandler("system.log", mode="a")
-system_formatter = logging.Formatter("%(asctime)s - %(message)s")
-system_handler.setFormatter(system_formatter)
-system_logger.addHandler(system_handler)
+from src.shared_memory_utils import update_shared_memory
 
 class Gateway:
-    def __init__(self, host="127.0.0.1", port=9000):
-        self.host = host
-        self.port = port
-        self.price_history = []
+    def __init__(self, name):
+        self.name = name
 
-    def get_price(self, symbol):
-        price = round(random.uniform(95, 110), 2)
-        self.price_history.append((symbol, price))
+    def get_market_data(self):
+        """Simulate fetching market prices."""
+        market_data = {
+            "AAPL": round(random.uniform(140, 160), 2),
+            "MSFT": round(random.uniform(280, 320), 2),
+            "GOOG": round(random.uniform(2500, 2700), 2)
+        }
+        update_shared_memory(market_data)
+        return market_data
 
-        # Limit to 10 most recent prices
-        if len(self.price_history) > 10:
-            self.price_history.pop(0)
-
-        system_logger.info(f"{symbol} price: {price}")
-        return price
-
-    def run(self):
-        print(f"✅ Gateway listening on {self.host}:{self.port}")
-        try:
-            while True:
-                for symbol in ["AAPL", "MSFT", "GOOGL"]:
-                    price = self.get_price(symbol)
-                    print(f"PRICE,{symbol},{price}*")
-                time.sleep(1)
-        except KeyboardInterrupt:
-            print("✅ Gateway stopped")
+# __main__ block for independent run
+if __name__ == "__main__":
+    gw = Gateway("DemoGateway")
+    data = gw.get_market_data()
+    print("Market Data:", data)

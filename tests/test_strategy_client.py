@@ -1,25 +1,23 @@
-# src/test_strategy_client.py
-import socket, json, time
+import unittest
+from src.strategy import Strategy
+from src.gateway import Gateway
+from src.ordermanager import OrderManager
+from src.shared_memory_utils import read_shared_memory
 
-HOST, PORT = "127.0.0.1", 9001
-DELIM = b"*"
+class TestStrategyClient(unittest.TestCase):
+    def setUp(self):
+        self.gateway = Gateway("DemoGateway")
+        self.order_manager = OrderManager()
+        self.strategy = Strategy(self.gateway, self.order_manager)
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.connect((HOST, PORT))
-print("Connected to OrderManager.")
+    def test_strategy_runs_and_places_orders(self):
+        self.strategy.run()
+        orders = read_shared_memory()
+        self.assertTrue(len(orders) > 0)
+        for order in orders:
+            self.assertIn("symbol", order)
+            self.assertIn("price", order)
+            self.assertIn("qty", order)
 
-orders = [
-    {"symbol": "AAPL", "side": "BUY", "qty": 5, "price": 171.25},
-    {"symbol": "MSFT", "side": "SELL", "qty": 10, "price": 328.10},
-]
-
-for order in orders:
-    msg = json.dumps(order).encode("utf-8") + DELIM
-    sock.sendall(msg)
-    print("Sent order:", order)
-    time.sleep(0.5)
-    data = sock.recv(1024)
-    print("Reply:", data.decode())
-
-sock.close()
-print("Client done.")
+if __name__ == "__main__":
+    unittest.main()

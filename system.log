@@ -16,3 +16,15 @@
 2025-11-08 17:23:24,796 - Strategy started
 2025-11-08 17:23:24,798 - GOOGL price: 97.53
 2025-11-08 17:23:24,799 - Generated BUY order for GOOGL at 97.53
+2025-11-08 17:56:13,282 - Strategy started
+2025-11-08 17:56:13,283 - AAPL price: 98.27
+2025-11-08 17:56:13,283 - Generated BUY order for AAPL at 98.27
+2025-11-08 17:56:14,787 - AAPL price: 95.11
+2025-11-08 17:56:14,789 - Generated BUY order for AAPL at 95.11
+2025-11-08 17:56:16,295 - GOOGL price: 107.56
+2025-11-08 17:56:16,297 - Generated SELL order for GOOGL at 107.56
+2025-11-08 17:56:17,804 - MSFT price: 100.24
+2025-11-08 17:56:17,804 - Generated SELL order for MSFT at 100.24
+2025-11-08 17:56:19,307 - AAPL price: 106.28
+2025-11-08 17:56:19,308 - Generated SELL order for AAPL at 106.28
+2025-11-08 17:56:20,849 - Strategy completed

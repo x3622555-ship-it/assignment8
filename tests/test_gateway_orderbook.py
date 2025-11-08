@@ -1,35 +1,23 @@
-import pytest
+import unittest
 from src.gateway import Gateway
-from src.ordermanager import OrderManager
-import json
+from src.orderbook import OrderBook
+from src.shared_memory_utils import read_shared_memory
 
-def test_gateway_price_format(monkeypatch, capsys):
-    """Test that Gateway prints prices in correct format"""
-    gw = Gateway()
+class TestGatewayOrderBook(unittest.TestCase):
+    def setUp(self):
+        self.gateway = Gateway("DemoGateway")
+        self.orderbook = OrderBook()
 
-    # Stop infinite loop
-    monkeypatch.setattr("time.sleep", lambda x: (_ for _ in ()).throw(KeyboardInterrupt))
+    def test_market_data_updates_shared_memory(self):
+        market_data = self.gateway.get_market_data()
+        shared_data = read_shared_memory()
+        self.assertEqual(market_data, shared_data)
 
-    try:
-        gw.run()
-    except KeyboardInterrupt:
-        pass
+    def test_orderbook_add_order(self):
+        order = {"symbol": "AAPL", "price": 150, "qty": 10}
+        self.orderbook.add_order(order)
+        shared_orders = read_shared_memory()
+        self.assertIn(order, shared_orders)
 
-    captured = capsys.readouterr().out
-    assert "PRICE," in captured
-    assert "*" in captured
-    print("✅ Gateway price output format OK")
-
-def test_ordermanager_send_order():
-    """Test that OrderManager returns valid JSON confirmation"""
-    om = OrderManager()
-    order = {"symbol": "AAPL", "side": "BUY", "qty": 10, "price": 100.0}
-    response = om.send_order(order)
-
-    data = json.loads(response)
-    assert data["status"] == "ACCEPTED"
-    assert data["symbol"] == "AAPL"
-    assert data["side"] == "BUY"
-    assert data["qty"] == 10
-    assert data["price"] == 100.0
-    print("✅ OrderManager confirmation OK")
+if __name__ == "__main__":
+    unittest.main()

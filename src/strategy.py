@@ -1,39 +1,31 @@
+# src/strategy.py
 from src.gateway import Gateway
 from src.ordermanager import OrderManager
-import time
-import random
-import logging
-
-# Configure system log
-system_logger = logging.getLogger("system")
 
 class Strategy:
-    def __init__(self):
-        self.gateway = Gateway()
-        self.om = OrderManager()
+    def __init__(self, gateway=None, order_manager=None):
+        self.gateway = gateway
+        self.order_manager = order_manager
 
     def run(self):
-        print("🚀 Strategy started...")
-        system_logger.info("Strategy started")
-        symbols = ["AAPL", "MSFT", "GOOGL"]
+        """Simple strategy: buy 1 unit of each stock if price below threshold."""
+        if self.gateway is None or self.order_manager is None:
+            print("No gateway or order manager assigned.")
+            return
 
-        for _ in range(5):  # limit to 5 trading cycles
-            symbol = random.choice(symbols)
-            price = self.gateway.get_price(symbol)
-            print(f"📊 {symbol} price: {price}")
+        market_data = self.gateway.get_market_data()
+        for symbol, price in market_data.items():
+            if symbol == "AAPL" and price < 155:
+                self.order_manager.place_order(symbol, price, 1)
+            elif symbol == "MSFT" and price < 310:
+                self.order_manager.place_order(symbol, price, 1)
+            elif symbol == "GOOG" and price < 2650:
+                self.order_manager.place_order(symbol, price, 1)
 
-            if price < 100:
-                order = {"symbol": symbol, "side": "BUY", "qty": 10, "price": price}
-            else:
-                order = {"symbol": symbol, "side": "SELL", "qty": 10, "price": price}
-
-            system_logger.info(f"Generated {order['side']} order for {symbol} at {price}")
-            self.om.send_order(order)
-            time.sleep(1)
-
-        print("✅ Strategy completed.")
-        system_logger.info("Strategy completed")
-
+# __main__ block for independent run
 if __name__ == "__main__":
-    strat = Strategy()
-    strat.run()
+    gateway = Gateway("DemoGateway")
+    order_manager = OrderManager()
+    strategy = Strategy(gateway, order_manager)
+    strategy.run()
+    order_manager.show_all_orders()

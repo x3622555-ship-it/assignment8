@@ -1,12 +1,15 @@
-from src.shared_memory_utils import SharedPriceBook
+import unittest
+from src.shared_memory_utils import update_shared_memory, read_shared_memory
 
-def test_shared_pricebook():
-    """Test SharedPriceBook functionality"""
-    book = SharedPriceBook()
-    book.update_price("AAPL", 100.5)
-    book.update_price("MSFT", 105.2)
+class TestSharedMemory(unittest.TestCase):
+    def test_update_and_read(self):
+        data = [{"symbol": "AAPL", "price": 150, "qty": 10}]
+        update_shared_memory(data)
+        self.assertEqual(read_shared_memory(), data)
 
-    assert book.get_price("AAPL") == 100.5
-    assert book.get_price("MSFT") == 105.2
-    assert book.get_price("GOOGL") is None  # not updated
-    print("✅ SharedPriceBook works correctly")
+    def test_overwrite_shared_memory(self):
+        update_shared_memory([{"symbol": "MSFT", "price": 300, "qty": 5}])
+        self.assertEqual(read_shared_memory(), [{"symbol": "MSFT", "price": 300, "qty": 5}])
+
+if __name__ == "__main__":
+    unittest.main()
